@@ -1,0 +1,124 @@
+% ----------
+% A LaTeX template for course project reports
+% 
+% This template is modified from "Tech Report ala MIT AI Lab (1981)"
+% 
+% ----------
+\documentclass[12pt, a4paper, twoside]{article}
+\usepackage{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage[runin]{abstract}
+\usepackage{titling}
+\usepackage{booktabs}
+\usepackage{fancyhdr}
+\usepackage{helvet}
+\usepackage{csquotes}
+\usepackage{graphicx}
+\usepackage{parskip}
+\usepackage{etoolbox}
+
+
+
+
+\input{preamble.tex}
+
+% ----------
+% Variables
+% ----------
+
+\title{\textbf{Visión Artificial Actividad 2:\\Exploración de filtros espaciales y morfológicos en escenarios reales}} % Full title of your tech report
+\runningtitle{Filtros espaciales y morfológicos} % Short title
+\author{Álvaro Orejón Blázquez \and León Enrique Prieto Bailo \and Pau Chamarro Lópex \and Nuria Iglesias Traviesa} % Full list of authors
+\affiliation{Universidad Internacional de La Rioja (UNIR)} % Affiliation e.g. University or Company
+\department{Escuela Superior de Ingeniería y Tecnología\\ Máster Universitario en Inteligencia Artificial} % Department or Office
+\theyear{2026} % year of the tech report
+\mydate{Enero 23, 2026} %the date
+
+% ----------
+% actual document
+% ----------
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+    \noindent
+    
+\end{abstract}
+
+\vspace{2.5cm}
+
+
+\thispagestyle{firstpage}
+
+\pagebreak
+
+% ----------
+% End of first page
+% ----------
+
+\tableofcontents
+
+\newgeometry{} % Redefine geometries (normal margins)
+
+\section{Introducción}
+\label{sec:intro}
+
+\section{Material y métodos}
+\label{sec:mat}
+
+\subsection{Selección de imágenes}
+\label{sec:imagenes}
+
+\subsection{Filtros espaciales}
+\label{sec:esp}
+
+\subsubsection{Suavizado}
+\label{sec:suavizado}
+\subsubsection{Realce de bordes}
+\label{sec:rb}
+
+\subsection{Filtros morfológicos}
+\label{sec:morf}
+
+\subsubsection{Dilatacion}
+\label{sec:Dilatacion}
+\subsubsection{Erosión}
+\label{sec:erosion}
+\subsubsection{Apertura}
+\label{sec:ap}
+\subsubsection{Cierre}
+\label{sec:cierre}
+
+
+\section{Resultados y métricas}
+\label{sec:result}
+
+\subsection{Escenario Industrial}
+\subsection{Escenario Médico}
+\subsection{Escenario Satelital}
+
+\section{Conclusiones}
+\label{sec:conc}
+
+\section{Declaración de la IA}
+\label{sec:decIA}
+
+% ----------
+% Bibliography
+% ----------
+
+% Uncomment the following and add your references into biblio.bib file
+\bibliography{./biblio.bib}
+\bibliographystyle{abbrv}
+
+\appendix
+
+\section{Apéndice A}
+
+
+
+\end{document}
+
+% ----------
