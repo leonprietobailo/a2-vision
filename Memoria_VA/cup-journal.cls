@@ -551,7 +551,7 @@
 \newcommand*\cup@etal{\emph{et al.}}
 \def\ps@plain{
   \renewcommand{\@oddhead}{\hfill{\journalnamefont\cup@journal@name}\qquad\thepage}%
-  \renewcommand{\@evenhead}{\thepage\qquad\@author@i\ifcsname @author@ii\endcsname\space\cup@etal\fi\hfill}%
+  \renewcommand{\@evenhead}{\ifcsname @author@ii\endcsname\space\fi\hfill}%
   \renewcommand{\@evenfoot}{}%
   \renewcommand{\@oddfoot}{\@evenfoot}%
 }
