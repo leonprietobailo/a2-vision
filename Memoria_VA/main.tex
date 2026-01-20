@@ -21,6 +21,14 @@
 \usepackage{amsmath}
 \usepackage[nopatch]{microtype}
 \usepackage{booktabs}
+\usepackage{parskip} 
+\usepackage{enumitem}
+\setlist[itemize]{left=1em}
+\usepackage{titlesec}
+% Espacio después de los títulos
+\titlespacing*{\section}{0pt}{0.6\baselineskip}{0.6\baselineskip}
+\titlespacing*{\subsection}{0pt}{0.5\baselineskip}{0.5\baselineskip}
+\titlespacing*{\subsubsection}{0pt}{0.4\baselineskip}{0.4\baselineskip}
 
 \title{Visión Artificial - Actividad 2: Exploración de filtros espaciales y morfológicos en escenarios reales}
 
@@ -102,8 +110,29 @@ En particular, se consideraron tres fuentes principales, asociadas a cada tipo d
 \subsection{Filtros espaciales}
 \label{sec:esp}
 
+Los filtros espaciales son operadores fundamentales en el procesado digital de imágenes y la visión por computador los cuales modifican las intensidades de los pixeles en base a los vecinos locales. A diferencia de otros métodos basados en dominios frecuenciales, el filtro espaciado se realiza en el dominio de la imagen, donde la salida de cada pixel es calculada como una función a partir de los pixeles vecinos definida por una mascara espacial o kernel. 
+
+Formalmente, un filtro espacial puede ser descrito como una función que desliza una pequeña matriz (kernel) sobre la imagen, calculando un nuevo valor de píxel en cada ubicación a través de una operación predefinida. En el caso de los filtros espaciales lineales, esta operación corresponde a una convolución o correlación entre la imagen y el kernel. Los filtros espaciales no lineales, por otro lado, se basan en operaciones no lineales como la selección de mínimos, máximos o medianas dentro de la vecindad de pixeles.
+
+Los filtros espaciales se categorizan habitualmente en función de los objetivos que persiguen. Los filtros de suavizado (o paso bajo) buscan reducir el ruido y pequeñas variaciones de intensidad promediando el valor de los píxeles en la vecindad. Ejemplos típicos incluyen filtros Gaussianos y de media, ampliamente utilizados como paso de preprocesado para mejorar la calidad y robustez de la imagen en análisis posteriores. Por el contrario, filtros como el realce de bordes enfatizan cambios de intensidad locales, resaltando bordes y detalles finos. Estos filtros son particularmente útiles para la extracción de características, detección de objetos y tareas de segmentación.
+
+La efectividad de un filtro espacial depende de varios factores, incluyendo el tamaño y forma del kernel, el tipo de operación aplicada, y las características de la propia imagen. Un kernel excesivamente largo puede suavizar excesivamente estructuras importantes, mientras que un filtro de realce inadecuado puede amplificar ruido e introducir artefactos. Por lo tanto, la selección de filtros espaciales debe ser adaptada cuidadosamente en función de la aplicación y el contexto de la imagen. 
+
+En escenarios prácticos, el filtrado espacial juega un rol crucial en diversos escenarios como la fotografía medica, la inspección industrial, la teledetección, y el análisis de imágenes biológicas. Al mejorar estructuras relevantes y mitigando variaciones indeseadas, los filtros espaciales facilitan la interpretación de información visual y mejoran el rendimiento de los algoritmos de visión por computador.
+
 \subsubsection{Suavizado}
 \label{sec:suavizado}
+
+Los filtros de suavizado, también conocidos como filtros paso bajo, son una clase de filtros espaciales cuyo objetivo principal consiste en atenuar variaciones rápidas de intensidad de las imágenes las cuales están normalmente asociadas con ruido y detalles de alta frecuencia. Como resultado, los filtros de suavizado se emplean habitualmente como una de las etapas del preprocesado para la mejora de la calidad y para mejorar la robustez de tareas posteriores como la segmentación, detección de bordes y extracción de características. 
+
+Conceptualmente, los filtros de suavizado funcionan agregando información de intensidad dentro de una vecindad local alrededor de cada pixel. Combinando los valores de la vecindad, se logra la atenuación de cambios de intensidad abruptos y se mantienen los cambios suaves en las regiones. Este proceso, conlleva una reducción de ruido pero introduce inevitablemente un cierto grado de desenfoque, particularmente en las fronteras de los objetos presentes. Consecuentemente, la aplicación del filtro paso-bajo implica un \textit{trade-off} entre la supresión de ruido y la conservación de los bordes. 
+
+Los filtros de suavizado pueden ser clasificados entre lineales y no lineales. Los filtros lineales calculan la salida de cada pixel como la suma ponderada de las intensidades de la vecindad. El filtro mas sencillo es el filtro de media, el cual reemplaza cada pixel con la media aritmética de los pixeles circundantes. Si bien es eficaz para reducir ruido Gaussiano, el filtro de media tiende a difuminar los bordes y las estructuras finas. El filtro Gaussiano representa representa una aproximación mas refinada, en la cual los pesos siguen una distribución Gaussiana centrada en el pixel de interés. Este esquema de ponderación enfatiza los pixeles mas cercanos y resulta en un filtrado mas suave y natural, a la vez que ofrece un mejor control sobre el grado de suavizado. 
+
+Los filtros de suavizado no lineales no se basan en operaciones de promediado, sino que aplican transformaciones basadas en estadísticas de orden o reglas. El filtro de mediana es una de las técnicas de suavizado no lineal mas utilizadas. Sustituye cada pixel con el valor de la mediana de las intensidades de la vecindad, haciéndolo particularmente efectivo en la supresión de ruido impulsivo, como el sal y pimienta. Otra ventaja importante de los filtros de media es su habilidad de preservar ejes y fronteras mas efectivamente que los filtros de media. 
+
+El rendimiento de los filtros de suavizado está muy influenciado por el tamaño y forma del kernel, así como las características de ruido presentes en la imagen. Kernels mas pequeños proveen de reducción de ruido limitada a la vez que preservan bien el detalle, mientras que kernels mas grandes generan efectos de suavizado mas fuertes a cambio de la perdida de información estructural. Por lo tanto, la selección del filtro y del tamaño del kernel apropiado debe ser adaptado a la aplicación especifica y el contexto que presenta la imagen. 
+
 \subsubsection{Realce de bordes}
 \label{sec:rb}
 
