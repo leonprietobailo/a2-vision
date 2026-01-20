@@ -116,9 +116,23 @@ En particular, se consideraron tres fuentes principales, asociadas a cada tipo d
 \label{sec:erosion}
 \subsubsection{Apertura}
 \label{sec:ap}
+
+La apertura es una operación morfológica compuesta que consiste en la aplicación secuencial de una erosión seguida de una dilatación, utilizando el mismo elemento estructurante en ambas operaciones. En la primera fase, la erosión reduce las regiones brillantes 
+de la imagen y elimina pequeñas estructuras no deseadas. A continuación, la dilatación restaura el tamaño de los objetos que han sobrevivido a la erosión, preservando así sus formas originales mientras se eliminan los elementos de menor tamaño. Esta operación 
+resulta especialmente útil para la eliminación de ruido y la separación de objetos que están conectados por pequeñas uniones. 
+
+Este proceso permite modificar la estructura de la imagen de manera controlada, eliminando detalles pequeños o irrelevantes y suavizando los contornos de los objetos principales. En este sentido, la operación de apertura actúa sobre la geometría 
+de las diferentes regiones, afectando principalmente a elementos con un tamaño inferior al del elemento estructurante utilizado.
+
 \subsubsection{Cierre}
 \label{sec:cierre}
 
+El cierre es una operación morfológica compuesta que consiste en la aplicación secuencial de una dilatación seguida de una erosión, utilizando el mismo elemento estructurante en ambas operaciones. En la primera fase, la dilatación expande las regiones 
+brillantes de la imagen, rellenando pequeñas separaciones y uniendo objetos cercanos. A continuación, la erosión reduce el tamaño de los objetos que han sido ampliados por la dilatación, restaurando sus formas originales y manteniendo las conexiones establecidas. 
+Esta operación es útil para cerrar pequeñas separaciones y eliminar pequeñas regiones oscuras dentro de objetos de mayor tamaño.
+
+Este proceso permite modificar la estructura de la imagen de manera controlada, rellenando huecos y suavizando los contornos de los objetos principales. En este caso, la operación de cierre actúa sobre la geometría de las diferentes regiones, afectando 
+principalmente a elementos con un tamaño inferior al del elemento estructurante utilizado.
 
 \section{Resultados y métricas}
 \label{sec:result}
