@@ -72,8 +72,32 @@ no existe un filtro universalmente óptimo, y que la eficacia de cada técnica d
 \section{Material y métodos}
 \label{sec:mat}
 
+\subsection{Software utilizado}
+\label{subsec:software}
+
+El procesamiento de imágenes se realizó usando el lenguaje de programación \textbf{Python}. 
+Por un lado, se empleó principalmente la librería \textbf{OpenCV} (\texttt{cv2}) para lectura, conversión de color y aplicación de los filtros espaciales y morfológicos, mientras que la librería \textbf{NumPy} se utilizó para operaciones de preprocesado y postprocesado. 
+Por último, la visualización y comparación de resultados se llevó a cabo con \textbf{Matplotlib}.
+
 \subsection{Selección de imágenes}
 \label{sec:imagenes}
+
+Con el objetivo de evaluar el comportamiento de filtros espaciales y operaciones morfológicas en un escenario multitemático, 
+se trabajó con un conjunto acotado de imágenes reales seleccionadas de tres ámbitos diferenciados: \textit{industrial}, \textit{médico} y \textit{satelital/ambiental}. 
+
+A la hora de elegir estas imágenes se han seleccionado ejemplos representativos con propiedades visuales claramente distintas, de manera que fuera posible comparar el efecto de las técnicas aplicadas en condiciones variadas.
+
+En particular, se consideraron tres fuentes principales, asociadas a cada tipo de escenario:
+\begin{itemize}
+    \item \textbf{Open-i (escenario médico).} Open-i es un dataset de imágenes biomédicas mantenido por la \textit{National Library of Medicine}, que nos permitió obtener imágenes relacionadas con la temática biomédica. 
+    En esta práctica se empleó para seleccionar radiografías, donde predominan gradientes suaves y estructuras anatómicas con bordes definidos, lo que resulta adecuado para analizar la atenuación de ruido mediante suavizado y los detectores de borde.
+
+    \item \textbf{Science Source (escenario industrial).} Science Source es una biblioteca científica con imágenes relacionadas con tecnología, laboratorio e industria. 
+    Se utilizó como fuente para seleccionar escenas industriales con patrones geométricos y contornos de alto contraste, idóneas para aplicar el filtrado espacial que afecta al detalle fino y las operaciones morfológicas, que pueden regular este tipo de estructuras.
+
+    \item \textbf{EOSDA LandViewer / Sentinel Playground / Kaggle (escenario satelital y ambiental).} Se recurrió a plataformas de exploración y descarga de imágenes satelitales, que permiten obtener escenas de misiones a distintas resoluciones. 
+    Estas fuentes proporcionan imágenes con grandes regiones homogéneas, texturas extensas (vegetación/cultivos) y elementos lineales (carreteras), lo que facilita contrastar el comportamiento de los filtros frente a variaciones de escala y contenido.
+\end{itemize}
 
 \subsection{Filtros espaciales}
 \label{sec:esp}
