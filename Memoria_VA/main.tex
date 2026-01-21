@@ -153,22 +153,26 @@ El rendimiento de los filtros de suavizado está muy influenciado por el tamaño
 \subsubsection{Apertura}
 \label{sec:ap}
 
-La apertura es una operación morfológica compuesta que consiste en la aplicación secuencial de una erosión seguida de una dilatación, utilizando el mismo elemento estructurante en ambas operaciones. En la primera fase, la erosión reduce las regiones brillantes 
-de la imagen y elimina pequeñas estructuras no deseadas. A continuación, la dilatación restaura el tamaño de los objetos que han sobrevivido a la erosión, preservando así sus formas originales mientras se eliminan los elementos de menor tamaño. Esta operación 
-resulta especialmente útil para la eliminación de ruido y la separación de objetos que están conectados por pequeñas uniones. 
+La apertura es una operación morfológica que combina de forma secuencial una erosión seguida de una dilatación, utilizando el mismo elemento estructurante en ambas etapas. En la primera fase, la erosión reduce las regiones brillantes de la imagen y elimina 
+pequeñas estructuras o detalles no deseados que no cumplen con el tamaño del elemento estructurante. Esto permite eliminar ruido o irregularidades sin afectar a los objetos principales de la imagen.
 
-Este proceso permite modificar la estructura de la imagen de manera controlada, eliminando detalles pequeños o irrelevantes y suavizando los contornos de los objetos principales. En este sentido, la operación de apertura actúa sobre la geometría 
-de las diferentes regiones, afectando principalmente a elementos con un tamaño inferior al del elemento estructurante utilizado.
+A continuación, la dilatación restaura parcialmente el tamaño de los objetos que han sobrevivido a la erosión, manteniendo su forma y sus contornos originales. De esta manera, la operación de apertura suaviza los bordes de los objetos principales 
+mientras elimina los elementos de menor tamaño, modificando la estructura de la imagen de forma controlada.
+
+El proceso de apertura actúa principalmente sobre elementos cuya dimensión es menor que la del elemento estructurante, afectando sobre todo a pequeños detalles o uniones entre objetos. El objetivo de esta técnica es obtener imágenes con estructuras más 
+limpias y contornos más definidos, facilitando la interpretación y análisis de los objetos presentes en la imagen.
 
 \subsubsection{Cierre}
 \label{sec:cierre}
 
-El cierre es una operación morfológica compuesta que consiste en la aplicación secuencial de una dilatación seguida de una erosión, utilizando el mismo elemento estructurante en ambas operaciones. En la primera fase, la dilatación expande las regiones 
-brillantes de la imagen, rellenando pequeñas separaciones y uniendo objetos cercanos. A continuación, la erosión reduce el tamaño de los objetos que han sido ampliados por la dilatación, restaurando sus formas originales y manteniendo las conexiones establecidas. 
-Esta operación es útil para cerrar pequeñas separaciones y eliminar pequeñas regiones oscuras dentro de objetos de mayor tamaño.
+El cierre es una operación morfológica que combina de manera secuencial una dilatación seguida de una erosión, utilizando el mismo elemento estructurante en ambas etapas. En la primera fase, la dilatación expande las regiones brillantes de la imagen, 
+rellenando pequeñas separaciones y conectando objetos cercanos que podrían estar ligeramente separados.
 
-Este proceso permite modificar la estructura de la imagen de manera controlada, rellenando huecos y suavizando los contornos de los objetos principales. En este caso, la operación de cierre actúa sobre la geometría de las diferentes regiones, afectando 
-principalmente a elementos con un tamaño inferior al del elemento estructurante utilizado.
+A continuación, la erosión reduce parcialmente el tamaño de los objetos que fueron ampliados durante la dilatación, restaurando sus formas originales y manteniendo las conexiones establecidas entre ellos. De esta manera, el cierre permite suavizar los bordes de 
+los objetos principales, rellenar huecos y unificar regiones.
+
+El proceso de cierre actúa principalmente sobre elementos más pequeños que el elemento estructurante, afectando a huecos en la imagen mientras conserva la geometría general de los objetos de mayor tamaño. El objetivo de esta técnica es obtener imágenes más uniformes 
+y continuas, facilitando la interpretación y el análisis de las estructuras presentes.
 
 \section{Resultados y métricas}
 \label{sec:result}
