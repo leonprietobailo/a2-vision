@@ -143,6 +143,46 @@ El rendimiento de los filtros de suavizado está muy influenciado por el tamaño
 \subsubsection{Realce de bordes}
 \label{sec:rb}
 
+El realce y la detección de bordes constituyen una de las etapas fundamentales en el procesamiento digital de imágenes y en los sistemas de visión artificial. Los bordes representan discontinuidades significativas en la intensidad de una imagen y suelen corresponder a límites entre objetos, cambios de material o variaciones abruptas de iluminación. La correcta identificación y realce de estos bordes facilita tareas posteriores como la segmentación, el reconocimiento de objetos y la extracción de características.
+
+Desde un punto de vista matemático, una imagen digital puede considerarse como una función bidimensional de intensidad $f(x, y)$. Un borde se define como una región donde dicha función presenta un cambio brusco, lo que se traduce en:
+\begin{itemize}
+    \item Valores elevados del gradiente (priemera derivada).
+    \item O bien cruces por cero en la segunda derivada.
+\end{itemize}
+Por este motivo, la mayoría de los filtros de realce de bordes se basan en aproximaciones discretas de derivadas espaciales.
+
+A continuación se describen los filtros espaciales más comunes utilizados para la detección de estructuras de borde en una imagen.
+
+El operador Roberts emplea máscaras de tamaño $2\times2$ (Figura~\ref{fig:robert_mask}) y está orientado a la detección de bordes diagonales. Debido al reducido tamaño de sus máscaras, es especialmente sensible al ruido, por lo que su uso se limita principalmente a fines didácticos o a imágenes con bajo nivel de ruido.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{images/roberts-mask.png}
+    \caption{Máscara Operador Roberts}
+    \label{fig:robert_mask}
+\end{figure}
+
+El operador Sobel aproxima el gradiente de la imagen mediante dos máscaras convolucionales de tamaño $3\times3$ (Figura~\ref{fig:sobel_mask}), orientadas en las direcciones horizontal y vertical. Estas máscaras incorporan un ligero suavizado al ponderar el píxel central, lo que reduce parcialmente la sensibilidad al ruido en comparación con otros operadores de gradiente más simples.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth]{images/sobel-mask.png}
+    \caption{Máscara Operador Sobel}
+    \label{fig:sobel_mask}
+\end{figure}
+
+El operador Prewitt es conceptualmente similar al operador Sobel, ya que utiliza máscaras de tamaño $3\times3$ (Figura~\ref{fig:prewitt_mask}) y permite estimar el gradiente en las direcciones horizontal y vertical. No obstante, emplea coeficientes uniformes en sus máscaras, lo que lo hace ligeramente menos preciso en la estimación del gradiente y algo más sensible al ruido.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{images/prewitt-mask.png}
+    \caption{Máscara Operador Prewitt}
+    \label{fig:prewitt_mask}
+\end{figure}
+
+El detector de Canny es considerado uno de los métodos más completos y robustos para la detección de bordes. Su funcionamiento se basa en una secuencia de etapas bien definidas: suavizado Gaussiano para la reducción del ruido, cálculo del gradiente, supresión de no-máximos con el objetivo de obtener bordes finos y bien localizados, y finalmente una umbralización con histéresis para eliminar respuestas débiles no conectadas con bordes significativos.
+
 \subsection{Filtros morfológicos}
 \label{sec:morf}
 
