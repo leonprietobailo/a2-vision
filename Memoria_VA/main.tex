@@ -83,7 +83,7 @@ no existe un filtro universalmente óptimo, y que la eficacia de cada técnica d
 \subsection{Software utilizado}
 \label{subsec:software}
 
-El desarrollo se llevó a cabo en \textbf{Jupyter Notebook} (\textbf{Python}) ejecutado desde \textbf{Visual Studio Code}, mediante librerías ampliamente utilizadas para garantizar una implementación altamente reproducible.
+El desarrollo se llevó a cabo en \textbf{Jupyter Notebook} (\textbf{Python}) ejecutado desde \textbf{Visual Studio Code}, mediante librerías ampliamente utilizadas para garantizar una implementación reproducible.
 Este entorno permitió integrar en un mismo flujo de trabajo la carga de imágenes, la aplicación de los algoritmos de filtrado y la visualización de los resultados.
 La posibilidad de visualizar de manera consistente las imágenes originales y las procesadas facilitó la comparación de las distintas transformaciones aplicadas.
 
@@ -97,7 +97,7 @@ Para asegurar aún más la \textbf{reproducibilidad}, el procedimiento se diseñ
 \label{sec:imagenes}
 
 Con el objetivo de evaluar el comportamiento de filtros espaciales y operaciones morfológicas en un escenario multitemático, 
-se trabajó con un conjunto acotado de imágenes reales (10 imágenes) seleccionadas de tres ámbitos diferenciados: \textit{industrial}, \textit{médico} y \textit{satelital/ambiental}. 
+se trabajó con un conjunto acotado de 10 imágenes reales seleccionadas de tres ámbitos diferenciados: \textit{industrial}, \textit{médico} y \textit{satelital/ambiental}. 
 
 La selección se realizó siguiendo criterios orientados a maximizar la diversidad, es decir, priorizando ejemplos representativos con propiedades visuales claramente distintas. 
 Al aplicar distintos filtros a cada una de las imágenes, se hizo posible la comparación entre las técnicas en condiciones cambiantes.
@@ -143,13 +143,93 @@ El rendimiento de los filtros de suavizado está muy influenciado por el tamaño
 \subsubsection{Realce de bordes}
 \label{sec:rb}
 
+El realce y la detección de bordes constituyen una de las etapas fundamentales en el procesamiento digital de imágenes y en los sistemas de visión artificial. Los bordes representan discontinuidades significativas en la intensidad de una imagen y suelen corresponder a límites entre objetos, cambios de material o variaciones abruptas de iluminación. La correcta identificación y realce de estos bordes facilita tareas posteriores como la segmentación, el reconocimiento de objetos y la extracción de características.
+
+Desde un punto de vista matemático, una imagen digital puede considerarse como una función bidimensional de intensidad $f(x, y)$. Un borde se define como una región donde dicha función presenta un cambio brusco, lo que se traduce en:
+\begin{itemize}
+    \item Valores elevados del gradiente (priemera derivada).
+    \item O bien cruces por cero en la segunda derivada.
+\end{itemize}
+Por este motivo, la mayoría de los filtros de realce de bordes se basan en aproximaciones discretas de derivadas espaciales.
+
+A continuación se describen los filtros espaciales más comunes utilizados para la detección de estructuras de borde en una imagen.
+
+El operador Roberts emplea máscaras de tamaño $2\times2$ (Figura~\ref{fig:robert_mask}) y está orientado a la detección de bordes diagonales. Debido al reducido tamaño de sus máscaras, es especialmente sensible al ruido, por lo que su uso se limita principalmente a fines didácticos o a imágenes con bajo nivel de ruido.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{images/roberts-mask.png}
+    \caption{Máscara Operador Roberts}
+    \label{fig:robert_mask}
+\end{figure}
+
+El operador Sobel aproxima el gradiente de la imagen mediante dos máscaras convolucionales de tamaño $3\times3$ (Figura~\ref{fig:sobel_mask}), orientadas en las direcciones horizontal y vertical. Estas máscaras incorporan un ligero suavizado al ponderar el píxel central, lo que reduce parcialmente la sensibilidad al ruido en comparación con otros operadores de gradiente más simples.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth]{images/sobel-mask.png}
+    \caption{Máscara Operador Sobel}
+    \label{fig:sobel_mask}
+\end{figure}
+
+El operador Prewitt es conceptualmente similar al operador Sobel, ya que utiliza máscaras de tamaño $3\times3$ (Figura~\ref{fig:prewitt_mask}) y permite estimar el gradiente en las direcciones horizontal y vertical. No obstante, emplea coeficientes uniformes en sus máscaras, lo que lo hace ligeramente menos preciso en la estimación del gradiente y algo más sensible al ruido.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{images/prewitt-mask.png}
+    \caption{Máscara Operador Prewitt}
+    \label{fig:prewitt_mask}
+\end{figure}
+
+El detector de Canny es considerado uno de los métodos más completos y robustos para la detección de bordes. Su funcionamiento se basa en una secuencia de etapas bien definidas: suavizado Gaussiano para la reducción del ruido, cálculo del gradiente, supresión de no-máximos con el objetivo de obtener bordes finos y bien localizados, y finalmente una umbralización con histéresis para eliminar respuestas débiles no conectadas con bordes significativos.
+
 \subsection{Filtros morfológicos}
 \label{sec:morf}
 
-\subsubsection{Dilatacion}
+\subsubsection{Dilatación}
 \label{sec:Dilatacion}
+
+La dilatación es uno de los operadores esenciales en la morfología matemática y su principal función es expandir las regiones de una imagen binaria, por lo que potencia las zonas de contornos y amplía los objetos presentes.
+
+Matemáticamente, la dilatación se puede expresar como la expansión de la imagen original \( A \) con respecto a un elemento estructural \( B \), de forma que la imagen resultante incrementa el tamaño de los objetos originales.
+\[
+A \oplus B = \bigcap_{b \in B} A_b
+\]
+
+El efecto de la dilatación en una imagen depende directamente de la forma y tamaño del elemento estructural utilizado. 
+Este elemento, que puede ser un cuadrado, círculo o cualquier otra forma, define el área sobre la cual se realiza la expansión.
+La operación se aplica píxel a píxel sobre toda la imagen, comprobando la relación entre el elemento estructural \( B \) y la imagen original \( A \).
+Cuando el elemento estructural entra en contacto con el objeto de la imagen, este se dilata en las áreas de solapamiento. 
+
+Se utiliza principalmente para fusionar elementos cercanos, como en la reconstrucción de objetos que fueron segmentados incorrectamente o en el relleno de huecos en una imagen. 
+Sin embargo, un efecto importante de la dilatación es que no conserva la forma original del objeto, lo que puede ser útil o perjudicial dependiendo del contexto de la segmentación.
+
+Esta técnica es particularmente útil en escenarios con bajo contraste o cuando los valores de intensidad están concentrados en un rango reducido, como en las imágenes de los escenarios médico y satelital de nuestro dataset. 
+Por ejemplo, en las radiografías médicas, la dilatación ayuda a fusionar fragmentos pequeños de estructuras anatómicas, como los huesos o lesiones, que se encuentran parcialmente segmentados o separados debido a la falta de contraste. 
+En las imágenes satelitales, la dilatación puede mejorar la visibilidad y conectividad de áreas de interés dispersas, como campos agrícolas o cuerpos de agua.
+
 \subsubsection{Erosión}
 \label{sec:erosion}
+
+La erosión es un operador morfológico que aunque lo parezca, no se puede considerar la inversa a la dilatación. Su principal objetivo es reducir el tamaño de los objetos en una imagen, eliminando los detalles y reduciendo los contornos. 
+
+Este operador es útil para eliminar pequeños objetos o detalles no deseados en una imagen segmentada.
+En el caso de las imágenes médicas, como las radiografías, la erosión puede ayudar a eliminar ruido que permanece tras la segmentación, haciendo que los objetos de interés, como huesos o lesiones, sean más claros y fáciles de analizar. 
+En las imágenes satelitales, la erosión es útil cuando se realiza la segmentación de grandes áreas de terreno, como campos agrícolas o zonas urbanas, ya que al simplificar las formas permite una mejor definición de las grandes estructuras como carreteras o edificios.
+
+Matemáticamente, la erosión se puede expresar como la reducción de la imagen original \( A \) con respecto a un elemento estructural \( B \), de forma que la imagen resultante disminuye el tamaño de los objetos originales.
+\[
+A \ominus B = \bigcup_{b \in B} A_b
+\]
+
+La erosión funciona de manera similar a la dilatación, pero en lugar de expandir los objetos, elimina los detalles exteriores. 
+El elemento estructural en este caso define el área sobre la cual se realiza la reducción. 
+Cuando este se encuentra completamente contenido dentro del objeto de la imagen, la imagen resultante conserva el área de solapamiento, pero elimina los detalles exteriores, reduciendo el tamaño de los objetos.
+
+El resultado de la erosión es que los objetos tienden a desaparecer parcialmente, especialmente aquellos que tienen bordes débiles o que no coinciden en su totalidad con el elemento estructural. 
+A diferencia de la dilatación, la erosión conserva menos detalles de la imagen original, lo que puede ser útil para acentuar la forma central de un objeto, facilitando tareas como la detección de bordes.
+Sin embargo, la erosión también modifica la forma original del objeto, a menudo eliminando detalles importantes si no se utiliza con precaución.
+
 \subsubsection{Apertura}
 \label{sec:ap}
 
