@@ -177,14 +177,94 @@ y continuas, facilitando la interpretación y el análisis de las estructuras pr
 \section{Resultados y métricas}
 \label{sec:result}
 
-\subsection{Escenario Industrial}
-\subsection{Escenario Médico}
-\subsection{Escenario Satelital}
+En esta sección se presentan los resultados obtenidos tras la aplicación de los distintos filtros espaciales y morfológicos sobre el conjunto de imágenes seleccionadas. El objetivo principal de este apartado es mostrar de manera clara el efecto que cada técnica
+produce a la imagen original. Esto nos permite observar cómo los diferentes filtros modifican la información y la estructura de las imágenes en función de sus características específicas.
+
+Para facilitar la interpretación, los resultados se organizan en dos grandes bloques: \textit{filtros espaciales} y \textit{filtros morfológicos}. Dentro de cada bloque se analiza de forma individual las disitntas técnicas aplicadas. Para cada subtécnica se muestran
+tres imágenes representativas, una de cada escenarios : \textit{médico}, \textit{industrial} y \textit{satelital/ambiental}, con el objetivo de ilustrar de manera directa el efecto de cada filtro en contextos variados sobre la imagen original. Además, se incluyen
+métricas propias que permiten cuantificar el impacto de cada filtro en términos de calidad visual y preservación de estructuras relevantes.
+
+Este enfoque permite exponer los resultados de manera sistemática, destacando los efectos de cada filtro de forma independiente. De este modo, se proporciona una visión completa tanto cualitativa como cuantitativa del impacto de los filtros aplicados sobre las imágenes 
+seleccionadas.
+
+\subsection{Filtros Espaciales}
+\label{sec:filtros_esp}
+\subsection{Filtros Morfológicos}
+\label{sec:filtros_morf}
+
+\subsubsection{Dilatación}
+\label{sec:dil}
+\subsubsection{Erosión}
+\label{sec:er}
+\subsubsection{Apertura}
+\label{sec:apt}
+
+A continuación, se muestra cómo afecta el filtro morfológico de apertura a las imágenes seleccionadas. Para cada imagen se muestran los cambios introducidos sobre la estructura y los detalles, permitiendo observar de manera directa cómo esta técnica 
+modifica la geometría de los objetos. Además, se incluyen métricas que cuantifican el impacto del filtro en términos de calidad visual y preservación de estructuras relevantes.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.6\textwidth]{images/fapertura.png}
+    \caption{Ejemplo de imagen procesada con el filtro de apertura morfológica.}
+    \label{fig:apertura}
+\end{figure}
+
+\begin{itemize}
+    \item \textbf{Austin\_2973:} Se observa una reducción de la textura detallada de los árboles y de los caminos estrechos, lo que indica que se ha suavizado la imagen y se han simplificado las estructuras finas.
+
+    \item \textbf{CXR2046:} La imagen presenta cambios más sutiles. El filtro suaviza ligeramente el ruido de la placa, pero conserva casi perfectamente la estructura ósea y pulmonar.
+
+    \item \textbf{PermanentCrop\_1643:} Debido a la baja resolución y al carácter pixelado de la imagen, el filtro elimina detalles pequeños y unifica bloques de color, generando una apariencia más plana y uniforme.
+\end{itemize}
+
+\medskip
+Las métricas cuantitativas de estas observaciones indican lo siguiente:
+
+\begin{itemize}
+    \item \textbf{PSNR:} La radiografía alcanza un valor de 42.95, lo que indica que la imagen transformada es casi idéntica que la imagen original. Las imágenes de Austin y PermanentCrop presentan valores más bajos, en torno a 25-28, lo que refleja una mayor pérdida de información estructural.
+    \item \textbf{SSIM:} La radiografía mantiene un valor cercano a 1 (0.994), mientras que PermanentCrop y Austin bajan a 0.826 y 0.776 respectivamente, mostrando que la apertura afecta más a la composición de estas últimas.
+    \item \textbf{Entropía:} Disminuye en todos los casos, lo que indica que la apertura simplifica la imagen al eliminar detalles pequeños y ruido.
+    \item \textbf{EPI:} Los valores se reducen notablemente, especialmente en PermanentCrop (cercano a 0), confirmando que los bordes finos son suavizados o eliminados.
+\end{itemize}
+
+En la imagen médica, el filtro de apertura es bastante conservador, reduciendo el ruido sin afectar la estructura principal, mientras que en las imágenes satelitales y aéreas tiende a eliminar detalles pequeños, resaltando las formas y estructuras más grandes.
+
+\subsubsection{Cierre}
+\label{sec:cierr}
+
+A continuación, se muestra cómo afecta el filtro morfológico de cierre a las imágenes seleccionadas. Para cada imagen se muestran los cambios introducidos sobre la estructura y los detalles, permitiendo observar de manera directa cómo esta técnica 
+modifica la geometría de los objetos. Además, se incluyen métricas que cuantifican el impacto del filtro en términos de calidad visual y preservación de estructuras relevantes.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.6\textwidth]{images/fcierre.png}
+    \caption{Ejemplo de imagen procesada con el filtro de cierre morfológica.}
+    \label{fig:cierre}
+\end{figure}
+
+\begin{itemize}
+    \item \textbf{Austin\_2973:} Las texturas finas, como las copas de los árboles, se suavizan, dando a la imagen un aspecto más uniforme.
+    \item \textbf{CXR2046:} La imagen presenta gradientes suaves y pocos detalles oscuros aislados, por lo que el filtro apenas altera la estructura original.
+    \item \textbf{PermanentCrop\_1643:} Se observa un suavizado en los bordes de las parcelas y una reducción del ruido granular en zonas oscuras, manteniendo la forma general de los objetos.
+\end{itemize}
+
+\medskip
+Las métricas cuantitativas de estas observaciones indican lo siguiente:
+
+\begin{itemize}
+    \item \textbf{PSNR:} La radiografía alcanza un valor de 49.02, lo que indica que la imagen transformada es casi idéntica que la imagen original. En cambio, la imagen de Austin presenta un valor de 26.50 dB, lo que indica que la estructura de la imagen se ha modificado más.
+    \item \textbf{SSIM:} La radiografía conserva un valor muy cercano a 1 (0.997), mientras que la imagen satelital desciende a 0.80, indicando que se han suavizado o perdido detalles finos.
+    \item \textbf{Entropía:} Disminuye en todos los casos, lo que indica que el filtro reduce el ruido y la información visual, dejando las imágenes más uniformes.
+    \item \textbf{EPI:} Los valores se reducen bastante, especialmente en la imagen Austin, lo que confirma que los bordes nítidos se suavizan o redondean al cerrar los pequeños huecos.
+\end{itemize}
+
+En la imagen médica, el filtro de cierre tiene un efecto mínimo, suavizando ligeramente pequeñas zonas oscuras sin alterar la estructura principal, mientras que en las imágenes satelitales y aéreas tiende a rellenar huecos y suavizar detalles finos, dando como resultado áreas más uniformes y compactas.
 
 \section{Conclusiones}
 \label{sec:conc}
 
 \section{Declaración de la IA}
+\label{sec:declaracionia}
 
 
 
