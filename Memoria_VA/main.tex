@@ -84,20 +84,20 @@ no existe un filtro universalmente óptimo, y que la eficacia de cada técnica d
 \label{subsec:software}
 
 El desarrollo se llevó a cabo en \textbf{Jupyter Notebook} (\textbf{Python}) ejecutado desde \textbf{Visual Studio Code}, mediante librerías ampliamente utilizadas para garantizar una implementación reproducible.
-Este entorno permitió integrar en un mismo flujo de trabajo la carga de imágenes, la aplicación de los algoritmos de filtrado y la visualización de los resultados.
-La posibilidad de visualizar de manera consistente las imágenes originales y las procesadas facilitó la comparación de las distintas transformaciones aplicadas.
+Se decidió el uso de este entorno para disponer en un mismo flujo de trabajo la carga de imágenes, la aplicación de los algoritmos de filtrado y la visualización de los resultados.
+El observar las imágenes originales y procesadas de manera consistente facilitó la comparación y nos permitió comprender en profundidad el efecto de cada de las distintas transformaciones aplicadas.
 
-En particular, se empleó \textbf{OpenCV} (\texttt{cv2}) para la lectura de imágenes, conversión de color y la implementación de los filtros espaciales y morfológicos. 
-Las operaciones de apoyo (preprocesado y postprocesado) se realizaron con la librería \textbf{NumPy}.
-Por último, \textbf{Matplotlib} se utilizó para la generación de figuras y la comparación sistemática de resultados.
+En particular, se empleó \textbf{OpenCV} (\texttt{cv2}) para la lectura de imágenes, conversión de color y la implementación de los filtros espaciales y morfológicos, eligiendo esta librería por numerosas razones, entre ellas sus funciones optimizadas para tareas de manipulación de imágenes, como la detección de bordes y la aplicación de diversos filtros. 
+Las operaciones de apoyo, como preprocesado y postprocesado, se realizaron con la librería \textbf{NumPy}, que es fundamental en el manejo de grandes volúmenes de datos, ya que proporciona herramientas para realizar operaciones matemáticas sobre matrices multidimensionales.
+Por último, \textbf{Matplotlib} se utilizó para la generación de figuras y la comparación visual clara y efectiva de los efectos de cada técnica sobre las imágenes.
 
-Para asegurar aún más la \textbf{reproducibilidad}, el procedimiento se diseñó de forma que los resultados sean replicables bajo las mismas condiciones de ejecución. 
+Para asegurar aún más la \textbf{reproducibilidad}, el procedimiento se tomó la decisión de crear la implementación de forma que los resultados sean replicables bajo las mismas condiciones de ejecución. 
 
 \subsection{Selección de imágenes}
 \label{sec:imagenes}
 
 Con el objetivo de evaluar el comportamiento de filtros espaciales y operaciones morfológicas en un escenario multitemático, 
-se trabajó con un conjunto acotado de 10 imágenes reales seleccionadas de tres ámbitos diferenciados: \textit{industrial}, \textit{médico} y \textit{satelital/ambiental}. 
+se trabajó con un conjunto acotado de imágenes reales seleccionadas de tres ámbitos diferenciados: \textit{industrial}, \textit{médico} y \textit{satelital/ambiental}. 
 
 La selección se realizó siguiendo criterios orientados a maximizar la diversidad, es decir, priorizando ejemplos representativos con propiedades visuales claramente distintas. 
 Al aplicar distintos filtros a cada una de las imágenes, se hizo posible la comparación entre las técnicas en condiciones cambiantes.
@@ -274,8 +274,78 @@ seleccionadas.
 
 \subsubsection{Dilatación}
 \label{sec:dil}
+
+En esta sección se presenta el efecto del filtro morfológico de dilatación sobre una imagen seleccionada del dataset \textit{EOSDA LandViewer}. 
+Este filtro, como ya se ha comentado antes, tiene como principal objetivo expandir las áreas de interés, conectando componentes cercanos y rellenando huecos en las estructuras presentes en la imagen. 
+A través de este proceso, las zonas de interés (en este caso, las áreas de agua) se amplían, mejorando su visibilidad y su posible detección.
+
+Para esta imagen, el elemento estructurante utilizado es de tamaño \( 3 \times 3 \), lo que significa que se está ampliando cada píxel en un vecindario de 3 píxeles alrededor del píxel central. 
+Cuanto mayor sea el tamaño del kernel, más se expandirán las áreas de interés. Además, se ha utilizado una sola iteración que controla cuántas veces se aplica la operación de dilatación a la imagen. 
+Aumentar el número de iteraciones ampliará aún más las áreas de interés, lo que podría ser útil para imágenes más fragmentadas, aunque tras realizar diferentes pruebas se ha comprobado que sobre esta imagen no era necesario.
+
+Se decidió aplicar la dilatación exclusivamente sobre el canal azul de la imagen, para resaltar y expandir las áreas de agua sin afectar los otros canales de color (rojo y verde), los cuales no contienen tanta información relevante para nuestro objetivo.
+En todo caso, con intención de mostrar la información completa también se mostrará el filtro aplicado a todos los canales.
+
+En la siguiente figura \ref{fig:filtros_dilatacion}, se muestran los resultados tras aplicar la dilatación a la imagen en tres casos diferentes: la imagen original (izquierda), la dilatación aplicada sin diferenciar canales (en medio) y la dilatación aplicada únicamente al canal azul (derecha).
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.25\textwidth]{images/fdilatacionorigin.png}
+\includegraphics[width=0.25\textwidth]{images/fdilatacionNormal.png}
+\includegraphics[width=0.25\textwidth]{images/fdilatacion-result.png}
+\caption{Ejemplo de imagen procesada con el filtro de dilatación en tres condiciones.}
+\label{fig:filtros_dilatacion}
+\end{figure}
+
+La imagen original muestra las zonas de agua destacando menos, con algunas áreas fragmentadas y menos definidas. 
+Si se aplicara la dilatación sobre todos los canales de color (rojo, verde y azul) de la imagen en lugar de solo al canal azul, como se puede observar en la Figura \ref{fig:filtros_dilatacion}, el filtro afectaría a las áreas de color de manera más general, lo que podría no ser ideal si el objetivo principal es resaltar únicamente las zonas de agua.
+De hecho, al aplicar dilatación sobre los tres canales, el filtro altera otras áreas de la imagen que no son de interés, afectando negativamente a la definición de estas áreas.
+
+Por otro lado, al implementar el filtro solo al canal azul, se observa una expansión más clara de las zonas objetivo, mejorando su visibilidad y conectividad sin afectar otras áreas de la imagen, demostrando ser un enfoque más eficiente con el objetivo asignado en este caso.
+
+En términos de métricas cuantitativas sobre la imagen con el filtro aplicado solo al canal azul, se ha observado lo siguiente:
+
+\begin{itemize}
+    \item \textbf{PSNR}: 32.88. La imagen dilatada muestra una ligera disminución, indicando que la dilatación ha introducido ciertos cambios en la imagen, pero que son mínimos,
+    Esto sugiere que la calidad de la imagen se conserva bastante bien.
+    \item \textbf{SSIM}: 0.9918. El valor de SSIM es extremadamente alto, representando que la dilatación no ha alterado significativamente la estructura global de la imagen, aunque se ha mejorado la visibilidad de las áreas de agua.
+    \item \textbf{Entropía}: 6.9063. La entropía disminuye ligeramente, lo que indica que la imagen se ha simplificado al expandir las áreas de agua y rellenar huecos, eliminando detalles pequeños en el proceso.
+    \item \textbf{EPI}: 1.5542. Los valores de EPI son relativamente bajos, lo que sugiere que la dilatación ha preservado los bordes más grandes de las zonas de agua, pero ha suavizado los bordes finos en las áreas dilatadas.
+\end{itemize}
+
+
 \subsubsection{Erosión}
 \label{sec:er}
+
+En esta segunda sección, se presenta el efecto del filtro morfológico de erosión sobre la imagen del dataset \textit{Open-i}. 
+Este se ha aplicado bajo las mismas condiciones que la dilatación, con un valor de elemento estructurante (kernel de tamaño \(3 \times 3\)) y número de iteraciones (una iteración).
+
+La siguiente figura muestra el resultado antes y después de aplicar la erosión a la imagen:
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.35\textwidth]{images/fErosionOriginal.png}
+\includegraphics[width=0.35\textwidth]{images/fErosionFinal.png}
+\caption{Ejemplo de imagen procesada con el filtro de erosión morfológica.}
+\end{figure}
+
+La imagen original muestra todas las estructuras, incluidas las pequeñas imperfecciones y detalles que no son relevantes para el análisis de las zonas óseas.
+
+En este caso, se observa un cambio sutil en la imagen tras aplicar la erosión, donde los detalles pequeños han sido eliminados simplificando la imagen. 
+Esto hace que las áreas más grandes, como las costillas y los pulmones, sean más visibles y fáciles de identificar.
+
+En términos de métricas cuantitativas, se ha observado lo siguiente:
+
+\begin{itemize}
+    \item \textbf{PSNR}: 34.87. La imagen dilatada muestra una mínima disminución en el valor de PSNR, lo que indica que la erosión ha introducido ciertos cambios en la imagen sin alterar la calidad general.
+    \item \textbf{SSIM}: 0.9337. El valor de SSIM es relativamente alto, lo que sugiere que la erosión no ha alterado significativamente la estructura global de la imagen incluso habiendo suavizado los detalles más pequeños.
+    \item \textbf{Entropía}: 7.7583. La entropía ha aumentado, lo que indica que la imagen se ha simplificado al eliminar detalles pequeños y suavizar áreas irrelevantes, facilitando la visualización de las estructuras principales, como los huesos.
+    \item \textbf{EPI}: 3.3505. Los valores de EPI muestran una ligera disminución, lo que sugiere que la erosión ha suavizado los bordes finos, pero ha preservado la estructura general de la imagen, mejorando la conectividad entre las áreas relevantes.
+\end{itemize}
+
+Tras este análisis, se puede afirmar que el filtro de erosión resulta ser una herramienta útil para analizar las estructuras principales en la imagen, como los huesos, quitando detalles irrelevantes. 
+Aunque los cambios no son grandes, se aprecia cómo la erosión mejora la visibilidad de las zonas importantes, como las costillas y los pulmones, al reducir el ruido en las áreas más oscuras. 
+
 \subsubsection{Apertura}
 \label{sec:apt}
 
