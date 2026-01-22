@@ -268,6 +268,65 @@ Este enfoque permite exponer los resultados de manera sistemática, destacando l
 seleccionadas.
 
 \subsection{Filtros Espaciales}
+
+\subsubsection{Suavizado}
+
+En esta sección se presenta la aplicación del filtro de suavizado sobre imágenes seleccionadas de un dataset de Open-I y Science Source. Aunque las imágenes empleadas no contienen altos niveles de ruido u otros efectos como sal y pimienta, donde este filtro destaca particularmente, la aplicación de esta transformación a las imágenes seleccionadas nos permite estudiar su impacto sobre las mismas. 
+
+Se contemplan dos imágenes; para la primera (4800 x 4800 px) se emplea un tamaño de kernel de 25, mientras que para la segunda (512 x 512 px) se utiliza un tamaño de 7. Esta magnitud varía siempre en función del tamaño de la imagen con la que se esté trabajando, del nivel de detalle que se quiera preservar y de la efectividad en la supresión del ruido presente en la imagen. 
+
+Se decide aplicar esta técnica sobre un escenario industrial, ya que posee una gran cantidad de bordes. El objetivo de esta transformación es observar cómo el filtro afecta a la componente estructural de la imagen. Asimismo, se decide aplicarla sobre una radiografía humana, con el fin de analizar la capacidad de eliminar detalles menos relevantes y centrar la imagen en estructuras de mayor tamaño. En este caso, se emplean y comparan filtros gaussianos y de media. 
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.25\textwidth]{images/smooth-filter/img1_original.png}
+\includegraphics[width=0.25\textwidth]{images/smooth-filter/img1_gaussian.png}
+\includegraphics[width=0.25\textwidth]{images/smooth-filter/img1_avg.png}
+\caption{Imagen industrial original y transformaciones mediante filtros de media y gaussiano. $K=25$.}
+\label{fig:filtro_suavizado_industrial}
+\end{figure}
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.25\textwidth]{images/smooth-filter/img2_original.png}
+\includegraphics[width=0.25\textwidth]{images/smooth-filter/img2_gaussian.png}
+\includegraphics[width=0.25\textwidth]{images/smooth-filter/img2_avg.png}
+\caption{Imagen médica original y transformaciones mediante filtros de media y gaussiano. $K=7$.}
+\label{fig:filtro_suavizado_medico}
+\end{figure}
+
+Como se puede observar en el caso de las imágenes industriales, la aplicación del filtro de suavizado afecta notablemente a las componentes estructurales de la imagen. Especialmente en el caso del filtro de media, se aprecia una supresión agresiva de los bordes presentes. 
+
+Para el caso de la imagen médica, se observa cómo pequeños elementos presentes en la imagen original, como los alvéolos pulmonares u otros componentes fibrosos de menor tamaño, desaparecen completamente, dejando a la vista órganos más relevantes y enfocando la imagen en estructuras de mayor escala.
+
+Respecto a las métricas obtenidas tras las transformaciones, se muestran a continuación:
+
+\begin{table}[h]
+\centering
+\caption{Métricas cuantitativas sobre las transformaciones aplicadas a ambas imágenes.}
+\label{tab:metricas-suavizado}
+\begin{tabular}{lcccc}
+\hline
+\textbf{Configuración} & \textbf{PSNR} & \textbf{SSIM} & \textbf{Entropy} & \textbf{EPI} \\
+\hline
+$Industrial_{avg}$   & 19.45 & 0.35 & 7.41 & 0.00 \\
+$Industrial_{gauss}$ & 21.55 & 0.47 & 7.48 & 0.00 \\
+$Medical_{avg}$      & 34.40 & 0.92 & 7.43 & 0.03 \\
+$Medical_{gauss}$    & 37.79 & 0.96 & 7.42 & 0.22 \\
+\hline
+\end{tabular}
+\end{table}
+
+A continuación se comentan las métricas expuestas en la Tabla \ref{tab:metricas-suavizado}:
+
+\begin{itemize}
+    \item \textbf{PSNR}: El filtrado gaussiano presenta valores de PSNR superiores al filtrado promedio, lo que indica una menor distorsión píxel a píxel respecto a la imagen original.
+    \item \textbf{SSIM}: El filtro gaussiano conserva mejor la estructura global de la imagen, especialmente en la imagen médica, donde se alcanzan valores de SSIM cercanos a 1.
+    \item \textbf{Entropía}: La entropía se mantiene prácticamente constante tras el suavizado, lo que indica que no se produce una pérdida significativa de información global.
+    \item \textbf{EPI}: El suavizado reduce de forma notable la preservación de bordes, siendo el filtro gaussiano claramente superior al filtro promedio, especialmente en la imagen médica.
+\end{itemize}
+
+
 \label{sec:filtros_esp}
 \subsection{Filtros Morfológicos}
 \label{sec:filtros_morf}
