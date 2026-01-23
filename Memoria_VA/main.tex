@@ -42,7 +42,7 @@
 
 \author{Iglesias Traviesa, Nuria}
 \affiliation{Estudiantes, Universidad Internacional de La Rioja}
-\email[Iglesias Traviesa, Nuria]{email@email.dom}
+\email[Iglesias Traviesa, Nuria]{nuria.iglesias660@comunidadunir.net}
 
 \author{Prieto Bailo, León Enrique}
 \affiliation{Estudiantes, Universidad Internacional de La Rioja}
@@ -55,12 +55,16 @@
 
 \addbibresource{bibliography.bib}
 
-\keywords{keyword entry 1, keyword entry 2, keyword entry 3} %% First letter not capped
+\keywords{visión artificial, procesamiento digital de imágenes, filtros espaciales, operaciones morfológicas, filtros de suavizado, detección de bordes}
 
 \begin{document}
 
 \begin{abstract}
-Insert abstract text here. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
+Este trabajo explora el comportamiento de distintos \textit{filtros espaciales} y \textit{operaciones morfológicas} aplicados sobre imágenes reales de distintos ámbitos (escenarios médico, industrial y satelital/ambiental). 
+El objetivo principal es comparar cómo cada técnica modifica la información visual, la preservación de estructuras relevantes y la interpretabilidad del contenido. 
+En concreto, se analizan su impacto tanto de forma cualitativa (inspección visual de la pérdida de detalle, eliminación de artefactos y cambios en contornos) como cuantitativa mediante métricas como PSNR, SSIM, entropía y un índice de preservación de bordes (EPI). 
+Los resultados obtenidos muestran que la eficacia de cada transformación depende fuertemente del contexto: los filtros de suavizado tienden a reducir ruido y detalle fino a costa de degradar bordes, mientras que las operaciones morfológicas permiten regular la conectividad y la geometría de las regiones de interés con cambios controlados en la estructura global.
+El estudio pone de manifiesto que no existe un filtro universalmente óptimo y que la selección de parámetros debe ajustarse al tipo de imagen y al objetivo de análisis. 
 \end{abstract}
 
 \section{Introducción}
@@ -83,15 +87,15 @@ no existe un filtro universalmente óptimo, y que la eficacia de cada técnica d
 \subsection{Software utilizado}
 \label{subsec:software}
 
-El desarrollo se llevó a cabo en \textbf{Jupyter Notebook} (\textbf{Python}) ejecutado desde \textbf{Visual Studio Code}, mediante librerías ampliamente utilizadas para garantizar una implementación reproducible.
+El desarrollo se llevó a cabo en \textbf{Jupyter Notebook} \parencite{jupyter-notebook-official} (\textbf{Python} \cite{python-official}) ejecutado desde \textbf{Visual Studio Code} \parencite{vscode-official}, mediante librerías ampliamente utilizadas para garantizar una implementación reproducible.
 Se decidió el uso de este entorno para disponer en un mismo flujo de trabajo la carga de imágenes, la aplicación de los algoritmos de filtrado y la visualización de los resultados.
 El observar las imágenes originales y procesadas de manera consistente facilitó la comparación y nos permitió comprender en profundidad el efecto de cada de las distintas transformaciones aplicadas.
 
-En particular, se empleó \textbf{OpenCV} (\texttt{cv2}) para la lectura de imágenes, conversión de color y la implementación de los filtros espaciales y morfológicos, eligiendo esta librería por numerosas razones, entre ellas sus funciones optimizadas para tareas de manipulación de imágenes, como la detección de bordes y la aplicación de diversos filtros. 
-Las operaciones de apoyo, como preprocesado y postprocesado, se realizaron con la librería \textbf{NumPy}, que es fundamental en el manejo de grandes volúmenes de datos, ya que proporciona herramientas para realizar operaciones matemáticas sobre matrices multidimensionales.
-Por último, \textbf{Matplotlib} se utilizó para la generación de figuras y la comparación visual clara y efectiva de los efectos de cada técnica sobre las imágenes.
+En particular, se empleó \textbf{OpenCV} \parencite{opencv-official} (\texttt{cv2}) para la lectura de imágenes, conversión de color y la implementación de los filtros espaciales y morfológicos, eligiendo esta librería por numerosas razones, entre ellas sus funciones optimizadas para tareas de manipulación de imágenes, como la detección de bordes y la aplicación de diversos filtros.
+Las operaciones de apoyo, como preprocesado y postprocesado, se realizaron con la librería \textbf{NumPy} \parencite{numpy-official}, que es fundamental en el manejo de grandes volúmenes de datos, ya que proporciona herramientas para realizar operaciones matemáticas sobre matrices multidimensionales.
+Por último, \textbf{Matplotlib} \parencite{matplotlib-official} se utilizó para la generación de figuras y la comparación visual clara y efectiva de los efectos de cada técnica sobre las imágenes.
 
-Para asegurar aún más la \textbf{reproducibilidad}, el procedimiento se tomó la decisión de crear la implementación de forma que los resultados sean replicables bajo las mismas condiciones de ejecución. 
+Para asegurar aún más la reproducibilidad, se tomó la decisión de crear la implementación de forma que los resultados sean replicables bajo las mismas condiciones de ejecución.
 
 \subsection{Selección de imágenes}
 \label{sec:imagenes}
@@ -104,13 +108,13 @@ Al aplicar distintos filtros a cada una de las imágenes, se hizo posible la com
 
 Estas imágenes fueron extraídas de tres fuentes principales, cada una para un tipo de escenario:
 \begin{itemize}
-    \item \textbf{Open-i (escenario médico).} Open-i es un dataset de imágenes biomédicas mantenido por la \textit{National Library of Medicine}, que nos permitió obtener imágenes relacionadas con la temática biomédica. 
+    \item \textbf{Open-i (escenario médico)} \parencite{openi-nlm}. Open-i es un repositorio y motor de búsqueda de imágenes biomédicas mantenido por la \textit{National Library of Medicine}, que nos permitió obtener imágenes relacionadas con la temática biomédica. 
     En esta práctica se empleó para seleccionar radiografías, donde predominan gradientes suaves y estructuras anatómicas con bordes definidos, lo que resulta extremadamente adecuado para analizar la atenuación de ruido mediante suavizado y los detectores de borde.
 
-    \item \textbf{Science Source (escenario industrial).} Science Source es una biblioteca científica con imágenes relacionadas con tecnología, laboratorio e industria. 
+    \item \textbf{Science Source (escenario industrial)} \parencite{sciencesource}. Science Source es una biblioteca científica con imágenes relacionadas con tecnología, laboratorio e industria. 
     Se utilizó como fuente para seleccionar escenas industriales con patrones geométricos y contornos de alto contraste, idóneas para aplicar el filtrado espacial que afecta al detalle fino y las operaciones morfológicas, que pueden regular este tipo de estructuras.
 
-    \item \textbf{EOSDA LandViewer / Sentinel Playground / Kaggle (escenario satelital y ambiental).} Se recurrió a plataformas de exploración ambiental y de imágenes satelitales.
+    \item \textbf{EOSDA LandViewer / Sentinel Playground (escenario satelital y ambiental)} \parencite{eosda-landviewer,sentinel-playground}. Se recurrió a plataformas de exploración ambiental y de imágenes satelitales.
     Estas nos proporcionan imágenes con grandes regiones homogéneas y elementos lineales (carreteras), lo que facilita comparar el comportamiento de los filtros cuando se enfrentan a variaciones de escala y contenido.
 \end{itemize}
 
@@ -143,14 +147,14 @@ El rendimiento de los filtros de suavizado está muy influenciado por el tamaño
 \subsubsection{Realce de bordes}
 \label{sec:rb}
 
-El realce y la detección de bordes constituyen una de las etapas fundamentales en el procesamiento digital de imágenes y en los sistemas de visión artificial. Los bordes representan discontinuidades significativas en la intensidad de una imagen y suelen corresponder a límites entre objetos, cambios de material o variaciones abruptas de iluminación. La correcta identificación y realce de estos bordes facilita tareas posteriores como la segmentación, el reconocimiento de objetos y la extracción de características [1].
+El realce y la detección de bordes constituyen una de las etapas fundamentales en el procesamiento digital de imágenes y en los sistemas de visión artificial. Los bordes representan discontinuidades significativas en la intensidad de una imagen y suelen corresponder a límites entre objetos, cambios de material o variaciones abruptas de iluminación. La correcta identificación y realce de estos bordes facilita tareas posteriores como la segmentación, el reconocimiento de objetos y la extracción de características \cite{DataImageProcessing}.
 
 Desde un punto de vista matemático, una imagen digital puede considerarse como una función bidimensional de intensidad $f(x, y)$. Un borde se define como una región donde dicha función presenta un cambio brusco, lo que se traduce en:
 \begin{itemize}
     \item Valores elevados del gradiente (priemera derivada).
     \item O bien cruces por cero en la segunda derivada.
 \end{itemize}
-Por este motivo, la mayoría de los filtros de realce de bordes se basan en aproximaciones discretas de derivadas espaciales [2].
+Por este motivo, la mayoría de los filtros de realce de bordes se basan en aproximaciones discretas de derivadas espaciales \cite{Szeliski}.
 
 A continuación se describen los filtros espaciales más comunes utilizados para la detección de estructuras de borde en una imagen.
 
@@ -189,9 +193,9 @@ El detector de Canny es considerado uno de los métodos más completos y robusto
 \subsubsection{Dilatación}
 \label{sec:Dilatacion}
 
-La dilatación es uno de los operadores esenciales en la morfología matemática y su principal función es expandir las regiones de una imagen binaria, por lo que potencia las zonas de contornos y amplía los objetos presentes.
+La dilatación es uno de los operadores esenciales en la morfología matemática y su principal función es expandir las regiones de una imagen binaria, por lo que potencia las zonas de contornos y amplía los objetos presentes \parencite{Serra1982IAMM}.
 
-Matemáticamente, la dilatación se puede expresar como la expansión de la imagen original \( A \) con respecto a un elemento estructural \( B \), de forma que la imagen resultante incrementa el tamaño de los objetos originales.
+Matemáticamente, la dilatación se puede expresar como la expansión de la imagen original \( A \) con respecto a un elemento estructural \( B \), de forma que la imagen resultante incrementa el tamaño de los objetos originales \parencite{Haralick1987MM}.
 \[
 A \oplus B = \bigcap_{b \in B} A_b
 \]
@@ -211,7 +215,7 @@ En las imágenes satelitales, la dilatación puede mejorar la visibilidad y cone
 \subsubsection{Erosión}
 \label{sec:erosion}
 
-La erosión es un operador morfológico que aunque lo parezca, no se puede considerar la inversa a la dilatación. Su principal objetivo es reducir el tamaño de los objetos en una imagen, eliminando los detalles y reduciendo los contornos. 
+La erosión es un operador morfológico que aunque lo parezca, no se puede considerar la inversa a la dilatación. Su principal objetivo es reducir el tamaño de los objetos en una imagen, eliminando los detalles y reduciendo los contornos \parencite{Soille2003MIA}. 
 
 Este operador es útil para eliminar pequeños objetos o detalles no deseados en una imagen segmentada.
 En el caso de las imágenes médicas, como las radiografías, la erosión puede ayudar a eliminar ruido que permanece tras la segmentación, haciendo que los objetos de interés, como huesos o lesiones, sean más claros y fáciles de analizar. 
@@ -537,14 +541,11 @@ En la imagen médica, el filtro de cierre tiene un efecto mínimo, suavizando li
 \section{Declaración de la IA}
 \label{sec:declaracionia}
 A lo largo del desarrollo de esta propuesta se ha utilizado la IA como una herramienta de apoyo, con el principal objetivo de resolver dudas, obtener orientación estructural y conceptual y para mejorar la redacción de algunos 
-apartados. Es importante destacar que no se ha utilizado la IA para desarrollar el proyecto en su totalidad, sino como un recurso complementario. La mayoría de las respuestas ofrecidas presentan imprecisiones o información no válida, por lo ha sido necesario contrastar la respuesta con fuentes fiables.
+apartados. Es importante destacar que no se ha utilizado la IA para desarrollar el proyecto en su totalidad, sino como un recurso complementario. La mayoría de las respuestas ofrecidas presentan imprecisiones o información no válida, 
+por lo ha sido necesario contrastar la respuesta con fuentes fiables. 
 
-\renewcommand{\refname}{Referencias}
-\begin{thebibliography}{99}
 
-\bibitem{DataImageProcessing} R. C. Gonzalez and R. E. Woods, \textit{Digital Image Processing}, 4th ed. Pearson, 2018.
-\bibitem{Szeliski} R. Szeliski, \textit{Computer Vision: Algorithms and Applications}. Springer, 2010.
+\printbibliography
 
-\end{thebibliography}
 
 \end{document}
