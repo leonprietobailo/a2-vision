@@ -1422,7 +1422,7 @@
 }
 % v1.3: numbered sectional headings for largetwo journals
 \def\cup@jnl@largetwo{
-  \def\cup@journal@name{Cambridge Large Two}
+  \def\cup@journal@name{}
   \cup@layout@largetwo
   % \setcounter{secnumdepth}{0} 
   \patchcmd{\@maketitle}
