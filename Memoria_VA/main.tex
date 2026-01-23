@@ -268,7 +268,7 @@ Este enfoque permite exponer los resultados de manera sistemática, destacando l
 seleccionadas.
 
 \subsection{Filtros Espaciales}
-
+\label{sec:filtros_esp}
 \subsubsection{Suavizado}
 
 En esta sección se presenta la aplicación del filtro de suavizado sobre imágenes seleccionadas de un dataset de Open-I y Science Source. Aunque las imágenes empleadas no contienen altos niveles de ruido u otros efectos como sal y pimienta, donde este filtro destaca particularmente, la aplicación de esta transformación a las imágenes seleccionadas nos permite estudiar su impacto sobre las mismas. 
@@ -326,8 +326,70 @@ A continuación se comentan las métricas expuestas en la Tabla \ref{tab:metrica
     \item \textbf{EPI}: El suavizado reduce de forma notable la preservación de bordes, siendo el filtro gaussiano claramente superior al filtro promedio, especialmente en la imagen médica.
 \end{itemize}
 
+\subsubsection{Realce de bordes}
+En esta sección se presenta la aplicación de filtros de realce de bordes sobre imágenes seleccionadas de los datasets Open-I, Science Source y EOSDA LandViewer. Se han empleado los filtros Prewitt y Canny, dado que el filtro de Prewitt presenta un comportamiento muy similar al de Sobel y permite reducir la redundancia en el análisis, mientras que Canny se considera un detector de bordes más completo y robusto, lo que facilita la comparación de su comportamiento frente a distintos tipos de imágenes.
 
-\label{sec:filtros_esp}
+Para el estudio se han utilizado tres imágenes de naturaleza diferente: una imagen industrial, una radiografía de tórax y una imagen satelital. La imagen industrial se ha seleccionado con el objetivo de analizar la eficacia de los filtros en un escenario con una elevada densidad de bordes y estructuras geométricas bien definidas. Asimismo, se ha incluido una imagen de rayos X del tórax para evaluar la capacidad de los filtros para realzar de forma más nítida las estructuras óseas del cuerpo humano, caracterizadas por transiciones de intensidad más suaves y bordes menos definidos.
+
+Por último, se ha añadido una imagen satelital correspondiente a un barrio residencial con el fin de comprobar si los filtros son capaces de realzar las distintas calles y elementos urbanos del núcleo. Dado que esta imagen presenta una resolución significativamente inferior al resto, ha sido necesario aplicar un reescalado previo con un factor $\times4$ mediante interpolación, ya que, en su tamaño original, los detalles resultaban imperceptibles y la aplicación de los filtros no producía resultados adecuados.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{images/satelite_prewitt_canny.png}
+\caption{Imagen industrial original y transformaciones mediante filtros de Prewitt y Canny.}
+\label{fig:filtro_borde_industrial}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{images/rx_prewitt_canny.png}
+\caption{Imagen médica original y transformaciones mediante filtros de Prewitt y Canny.}
+\label{fig:filtro_borde_medico}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{images/res_prewitt_canny.png}
+\caption{Imagen satelital original y transformaciones mediante filtros de Prewitt y Canny.}
+\label{fig:filtro_borde_satelital}
+\end{figure}
+
+Como se puede observar en la Figura~\ref{fig:filtro_borde_industrial}, la aplicación del filtro de Canny en la imagen satelital produce un realce considerable de los bordes correspondientes a los caminos y a las estructuras de mayor tamaño. Este comportamiento permite identificar con claridad las principales infraestructuras presentes en la escena. No obstante, el resultado muestra un oscurecimiento general de la imagen y la pérdida de ciertos detalles asociados a edificios o estructuras de menor tamaño. Por el contrario, la imagen procesada con el filtro Prewitt no presenta un realce significativo de los bordes y, en términos generales, empeora la visualización con respecto a la imagen original, dificultando la identificación de las estructuras de interés.
+
+En el caso de la Figura~\ref{fig:filtro_borde_medico}, se observa un comportamiento opuesto. El filtro Prewitt permite distinguir de manera más clara las estructuras óseas de la caja torácica, así como los huesos del hombro y del brazo, manteniendo una mayor continuidad en los contornos. En cambio, el filtro Canny genera únicamente algunas líneas inconexas correspondientes a los huesos, lo que impide apreciar las distintas estructuras óseas de forma completa y dificulta su interpretación visual.
+
+Por último, en la Figura~\ref{fig:filtro_borde_satelital}, al igual que en la Figura~\ref{fig:filtro_borde_medico} el filtro Prewitt distingue mejor los diferentes bordes de las calles incluso ha reconocido alguna vivienda o estructura grande. El filtro Canny en este caso no ha sido capaz de distinguir nada claramente, salvo un par de viviendas pero no hay ninguna estructura definida en la transformacion. Ambas cosas pueden ser debidas a la mala calidad de la imagen y debido a ello los filtros se comporten de manera diferente.
+
+A continuación se muestran las métricas obtenidas en las imagenes:
+
+\begin{table}[h]
+\centering
+\caption{Métricas cuantitativas sobre las transformaciones aplicadas a ambas imágenes.}
+\label{tab:metricas-edge}
+\begin{tabular}{lcccc}
+\hline
+\textbf{Configuración} & \textbf{PSNR} & \textbf{SSIM} & \textbf{Entropy} & \textbf{EPI} \\
+\hline
+$Industrial_{prew}$   & 8.09 & 0.04 & 11.15 & 1.84 \\
+$Industrial_{can}$ & 5.82 & 0.00 & 0.50 & 2.35 \\
+$Medical_{prew}$      & 6.66 & 0.14 & 9.06 & 1.77 \\
+$Medical_{can}$    & 5.56 & 0.04 & 0.13 & 1.92 \\
+$satelital{prew}$      & 11.55 & 0.10 & 10.84 & 1.45 \\
+$satelital{can}$    & 6.52 & 0.01 & 0.84 & 2.83 \\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{itemize}
+    \item \textbf{PSNR}: Los valores de PSNR obtenidos son bajos en ambos filtros, lo que indica una modificación significativa de la imagen original. El filtro Prewitt presenta, en general, valores de PSNR superiores a los del filtro Canny, reflejando una transformación menos agresiva de la imagen.
+    
+    \item \textbf{SSIM}: El filtro Prewitt tiende a conservar mejor la estructura global de la imagen, alcanzando valores de SSIM superiores a los obtenidos con Canny. En contraste, el filtro Canny muestra valores de SSIM muy reducidos, debido a su carácter selectivo y a la eliminación de gran parte de la información estructural.
+    
+    \item \textbf{Entropía}: La entropía es considerablemente mayor en las imágenes procesadas con Prewitt, lo que indica la conservación de una mayor cantidad de información y detalle. Por el contrario, el filtro Canny produce valores de entropía muy bajos, reflejando una simplificación notable de la imagen al retener únicamente los bordes más relevantes.
+    
+    \item \textbf{EPI}: El filtro Canny presenta valores de EPI más elevados, lo que indica una detección más intensa de gradientes fuertes. Sin embargo, este comportamiento no implica necesariamente una mejor preservación estructural. El filtro Prewitt, aunque obtiene valores de EPI inferiores, mantiene una mayor continuidad de los bordes y una representación más fiel de las estructuras originales.
+\end{itemize}
+
 \subsection{Filtros Morfológicos}
 \label{sec:filtros_morf}
 
