@@ -1240,7 +1240,7 @@
   }
     \def\ps@plain{
       \renewcommand{\@oddhead}{\sffamily{\journalnamefont\cup@journal@name}\hfill\thepage}%
-      \renewcommand{\@evenhead}{\sffamily\thepage\hfill\@author@i\ifcsname @author@ii\endcsname\space\cup@etal\fi}%
+      \renewcommand{\@evenhead}{\sffamily\ifcsname @author@ii\endcsname\space\fi}%
       \renewcommand{\@evenfoot}{}%
       \renewcommand{\@oddfoot}{\@evenfoot}%
     }
@@ -1364,7 +1364,7 @@
       \end{@twocolumnfalse}]}
   \def\ps@plain{
       \renewcommand{\@oddhead}{\sffamily{\journalnamefont\cup@journal@name}\hfill\thepage}%
-      \renewcommand{\@evenhead}{\sffamily\thepage\hfill\@author@i\ifcsname @author@ii\endcsname\space\cup@etal\fi}%
+      \renewcommand{\@evenhead}{\sffamily\ifcsname @author@ii\endcsname\space\fi}%
       \renewcommand{\@evenfoot}{}%
       \renewcommand{\@oddfoot}{\@evenfoot}%
     }
@@ -1431,7 +1431,6 @@
   \renewcommand{\email}[2][]{%
     \cup@emailtrue%
     \def\cup@contact@details{%
-      {\emailfont \textbf{Author for correspondence: }##1, Email: ##2.}%
     }%
   }
   \let\endnote\footnote
