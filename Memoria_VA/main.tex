@@ -143,14 +143,14 @@ El rendimiento de los filtros de suavizado está muy influenciado por el tamaño
 \subsubsection{Realce de bordes}
 \label{sec:rb}
 
-El realce y la detección de bordes constituyen una de las etapas fundamentales en el procesamiento digital de imágenes y en los sistemas de visión artificial. Los bordes representan discontinuidades significativas en la intensidad de una imagen y suelen corresponder a límites entre objetos, cambios de material o variaciones abruptas de iluminación. La correcta identificación y realce de estos bordes facilita tareas posteriores como la segmentación, el reconocimiento de objetos y la extracción de características.
+El realce y la detección de bordes constituyen una de las etapas fundamentales en el procesamiento digital de imágenes y en los sistemas de visión artificial. Los bordes representan discontinuidades significativas en la intensidad de una imagen y suelen corresponder a límites entre objetos, cambios de material o variaciones abruptas de iluminación. La correcta identificación y realce de estos bordes facilita tareas posteriores como la segmentación, el reconocimiento de objetos y la extracción de características [1].
 
 Desde un punto de vista matemático, una imagen digital puede considerarse como una función bidimensional de intensidad $f(x, y)$. Un borde se define como una región donde dicha función presenta un cambio brusco, lo que se traduce en:
 \begin{itemize}
     \item Valores elevados del gradiente (priemera derivada).
     \item O bien cruces por cero en la segunda derivada.
 \end{itemize}
-Por este motivo, la mayoría de los filtros de realce de bordes se basan en aproximaciones discretas de derivadas espaciales.
+Por este motivo, la mayoría de los filtros de realce de bordes se basan en aproximaciones discretas de derivadas espaciales [2].
 
 A continuación se describen los filtros espaciales más comunes utilizados para la detección de estructuras de borde en una imagen.
 
@@ -537,7 +537,14 @@ En la imagen médica, el filtro de cierre tiene un efecto mínimo, suavizando li
 \section{Declaración de la IA}
 \label{sec:declaracionia}
 A lo largo del desarrollo de esta propuesta se ha utilizado la IA como una herramienta de apoyo, con el principal objetivo de resolver dudas, obtener orientación estructural y conceptual y para mejorar la redacción de algunos 
-apartados. Es importante destacar que no se ha utilizado la IA para desarrollar el proyecto en su totalidad, sino como un recurso complementario. La mayoría de las respuestas ofrecidas presentan imprecisiones o información no válida, 
-por lo ha sido necesario contrastar la respuesta con fuentes fiables.
+apartados. Es importante destacar que no se ha utilizado la IA para desarrollar el proyecto en su totalidad, sino como un recurso complementario. La mayoría de las respuestas ofrecidas presentan imprecisiones o información no válida, por lo ha sido necesario contrastar la respuesta con fuentes fiables.
+
+\renewcommand{\refname}{Referencias}
+\begin{thebibliography}{99}
+
+\bibitem{DataImageProcessing} R. C. Gonzalez and R. E. Woods, \textit{Digital Image Processing}, 4th ed. Pearson, 2018.
+\bibitem{Szeliski} R. Szeliski, \textit{Computer Vision: Algorithms and Applications}. Springer, 2010.
+
+\end{thebibliography}
 
 \end{document}
