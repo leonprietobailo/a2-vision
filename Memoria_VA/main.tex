@@ -38,7 +38,7 @@
 
 \author{Lopez Chamarro, Pau}
 \affiliation{Estudiantes, Universidad Internacional de La Rioja}
-\email[Lopez Chamarro, Pau]{email@email.dom}
+\email[Lopez Chamarro, Pau]{pau.chamarro455@comunidadunir.net}
 
 \author{Iglesias Traviesa, Nuria}
 \affiliation{Estudiantes, Universidad Internacional de La Rioja}
@@ -46,7 +46,7 @@
 
 \author{Prieto Bailo, León Enrique}
 \affiliation{Estudiantes, Universidad Internacional de La Rioja}
-\email[Prieto Bailo, León Enrique]{contact@leonprieto.com}
+\email[Prieto Bailo, León Enrique]{leonenrique.pri7080@comunidadunir.net}
 % \author{T. Author}
 % \affiliation{Second Division, Organization, City, Pincode, State, Country}
 
@@ -535,8 +535,29 @@ Las métricas cuantitativas de estas observaciones indican lo siguiente:
 
 En la imagen médica, el filtro de cierre tiene un efecto mínimo, suavizando ligeramente pequeñas zonas oscuras sin alterar la estructura principal, mientras que en las imágenes satelitales y aéreas tiende a rellenar huecos y suavizar detalles finos, dando como resultado áreas más uniformes y compactas.
 
+\section{Discusión}
+\label{sec:discusion}
+
+En conjunto, los resultados muestran que el filtrado espacial no debe ser interpretado como un paso de mejora universal, sino como una transformación con efectos específicos que dependen del objetivo (reducción de ruido, preservación estructural, o mejora de bordes) y las características de la escena (textura, contraste, y escala). En este sentido, el principal hallazgo es la existencia de un \textit{trade-off} entre el suavizado y la preservación de los detalles: las técnicas mas agresivas en reducir la variabilidad local tienden a degradar los bordes y microestructuras, mientras que otras aproximaciones mas conservativas son mejores preservando geometría pero dejan mas residuo de ruido o textura.
+
+Las métricas cuantitativas respaldan esta lectura, pero deben ser interpretadas en relación con el propósito del procesado. Métricas como PNSR y SSIM premian la similitud con la imagen original, lo cual es útil para la estimación global de la distorsión, aunque no necesariamente refleja una mejora funcional cuando el objetivo es facilitar tareas posteriores (por ejemplo, segmentación o detección). En cambio, indicadores relacionados con los bordes y los componentes estructurales proveen de una señal complementaria sobre pérdida o preservación de contornos, reforzando que la calidad "optima" no es absoluta, si no que depende del criterio de uso. 
+
+De forma paralela, el análisis muestra que la parametrización es determinante: el tamaño del kernel, el elemento estructurante y los umbrales de detección condicionan tanto o mas que el método elegido. Por lo tanto, la elección de los parámetros debe ser consistente con la escala de los objetos de interés: parámetros grandes favorecen regularización y conectividad, pero pueden borrar información fina; parámetros pequeños preservan el detalle, pero pueden ser insuficientes para estabilizar el ruido o consolidar regiones. 
+
+Finalmente, el conjunto de técnicas consideradas sugiere una recomendación general: conviene alinear el filtrado con una intención explicita y, cuando sea posible, evaluar su impacto desde un punto de vista orientado a tareas posteriores. En otras palabras, en vez de buscar el "mejor filtro" en términos generales, resulta más consistente seleccionar una combinación de operadores y parámetros que optimice el equilibrio relevante para el problema, dejando las conclusiones finales como síntesis de dichas decisiones y sus implicaciones. 
+
 \section{Conclusiones}
-\label{sec:conc}
+\label{sec:conclusiones}
+
+Este trabajo ha analizado el comportamiento practico de un conjunto representativo de \textit{filtros espaciales} y \textit{operaciones morfologicas} cuando son aplicadas a imágenes reales de tres dominios heterogéneos (medico, industrial y satelital). El objetivo principal era caracterizar como cada técnica modificaba la información visual, como preservaba las estructuras relevantes y como la interpretabilidad cambia en función del método y de su parametrización. Para realizar una comparación robusta, la evaluación combino inspecciones cualitativas con indicadores cuantitativos, incluyendo PNSR, SSIM, entropía e indice de preservación de bordes (EPI).
+
+En general, los resultados confirman que no hay un único operador que pueda ser considerado universalmente optimo. En cambio, el rendimiento del filtro se ve altamente condicionado por (i) el contenido de la imagen (textura, distribución de contrastes, y escala del objeto), (ii) el propósito (eliminar ruido, enfatizar bordes, o consolidación estructural), y (iii) los parámetros seleccionados (tamaño de kernel, elemento estructural, y umbrales). En particular, los filtros de suavizado presentan constantemente un \textit{trade-off}: el incremento de la atenuación de ruido incrementa el riesgo de bordes borrosos y de atenuar detalles finos. Adicionalmente, operaciones de realce de bordes mejoran la saliencia de los límites pero pueden amplificar ruidos y generar artefactos cuando la escena contenga texturas de alta frecuencia o cuando el suavizado previo sea insuficiente. 
+
+Los operadores morfológicos demostraron ser especialmente eficaces para controlar la conectividad y la geometría en regiones binarizadas o de alto contraste. La erosión y la apertura tienden a eliminar pequeños componentes brillantes y protuberancias delgadas, lo cual es beneficioso para eliminar artefactos aislados pero también pueden eliminar microcaracteristicas clínicas o estructuralmente relevantes. La dilatación y el cierre generalmente consolidan regiones fragmentadas y rellenan pequeños huecos, mejorando la continuidad de la región a costa del engrosamiento de los límites y la posible fusión de estructuras cercanas. Estos efectos se han ido mostrando constantemente en las métricas cuantitativas de la misma manera que con los filtros espaciales. 
+
+Desde el punto de vista de aplicación de las técnicas, la principal implicación metodológica es que la selección del filtro debe ser formulada como una decisión de diseño orientada a objetivos, en lugar de como un paso de mejora genérico. Los resultados mas fiables se obtuvieron cuando la elección de parámetros estaba alineada con la escala espacial de las estructuras. Consecuentemente, se recomienda (i) definir explícitamente el objetivo final (por ejemplo, preparación para segmentación, localización de bordes o regularización de regiones), (ii) restringir los rangos de parámetros en función del tamaño esperado del objeto, y (iii) evaluar los resultados con una combinación de métricas perceptuales y estructurales, evitando depender exclusivamente de PNSR/SSIM cuando la transformación es intencionalmente no conservadora. 
+
+Finalmente, este estudio presenta varias lineas naturales para trabajos futuros. Primero, la extensión del dataset y la implementación de modelos de ruido (por ejemplo, speckle, Poisson) reforzarían la generalización en diferentes condiciones de adquisición. En segundo lugar, evaluar el rendimiento con métricas a nivel de tarea (por ejemplo, precisión de segmentación, precisión/recuperación de la detección) proporcionaría una noción de mejora mas operativa que la simple similitud. En tercer lugar, la optimización sistemática de la parametrización podría formalizar el proceso de selección y reducir la subjetividad. Estas ampliaciones consolidarían aún más la conclusión central de este proyecto: un filtrado de imágenes eficaz depende intrínsecamente del contexto y debe ajustarse a las características de la imagen y al objetivo analítico previsto.
 
 \section{Distribución del trabajo}
 \label{sec:distribuciontrabajo}
@@ -565,8 +586,6 @@ A lo largo del desarrollo de esta propuesta se ha utilizado la IA como una herra
 apartados. Es importante destacar que no se ha utilizado la IA para desarrollar el proyecto en su totalidad, sino como un recurso complementario. La mayoría de las respuestas ofrecidas presentan imprecisiones o información no válida, 
 por lo ha sido necesario contrastar la respuesta con fuentes fiables. 
 
-
 \printbibliography
-
 
 \end{document}
